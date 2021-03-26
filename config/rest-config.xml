@@ -67,28 +67,16 @@
       <halJsonPin name="pos" type="float" dir="io"/>
       <halJsonPin name="onOffset" type="float" dir="io"/>
       <halJsonPin name="offOffset" type="float" dir="io"/>
-      <halJsonObject name="whm">
-        <halJsonPin name="secs" type="u32" dir="in"/>
-        <halJsonPin name="meters" type="u32" dir="in"/>
-      </halJsonObject>
     </halJsonArray>
     <halJsonArray name="cleaners" size="3">
       <halJsonPin name="pos" type="float" dir="io"/>
       <halJsonPin name="onOffset" type="float" dir="io"/>
       <halJsonPin name="offOffset" type="float" dir="io"/>
-      <halJsonObject name="whm">
-        <halJsonPin name="secs" type="u32" dir="in"/>
-        <halJsonPin name="meters" type="u32" dir="in"/>
-      </halJsonObject>
     </halJsonArray>
     <halJsonArray name="unidevs" size="1">
       <halJsonPin name="pos" type="float" dir="io"/>
       <halJsonPin name="onOffset" type="float" dir="io"/>
       <halJsonPin name="offOffset" type="float" dir="io"/>
-      <halJsonObject name="whm">
-        <halJsonPin name="secs" type="u32" dir="in"/>
-        <halJsonPin name="meters" type="u32" dir="in"/>
-      </halJsonObject>
     </halJsonArray>
     <halJsonArray name="bevels" size="2">
       <halJsonPin name="widthOffset" type="float" dir="io"/>
@@ -96,19 +84,11 @@
         <halJsonPin name="pos" type="float" dir="io"/>
         <halJsonPin name="onOffset" type="float" dir="io"/>
         <halJsonPin name="offOffset" type="float" dir="io"/>
-        <halJsonObject name="whm">
-          <halJsonPin name="secs" type="u32" dir="in"/>
-          <halJsonPin name="meters" type="u32" dir="in"/>
-        </halJsonObject>
       </halJsonObject>
       <halJsonArray name="motors" size="3">
         <halJsonPin name="pos" type="float" dir="io"/>
         <halJsonPin name="onOffset" type="float" dir="io"/>
         <halJsonPin name="offOffset" type="float" dir="io"/>
-        <halJsonObject name="whm">
-          <halJsonPin name="secs" type="u32" dir="in"/>
-          <halJsonPin name="meters" type="u32" dir="in"/>
-        </halJsonObject>
       </halJsonArray>
     </halJsonArray>
     <halJsonArray name="rolls" size="31">
@@ -116,10 +96,6 @@
       <halJsonPin name="onOffset" type="float" dir="io"/>
       <halJsonPin name="offOffset" type="float" dir="io"/>
     </halJsonArray>
-    <halJsonObject name="whm">
-      <halJsonPin name="secs" type="u32" dir="in"/>
-      <halJsonPin name="meters" type="u32" dir="in"/>
-    </halJsonObject>
   </halJsonRoot>
 
 </halJson>

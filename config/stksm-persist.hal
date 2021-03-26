@@ -2,7 +2,6 @@
 # global
 ###########################################################
 
-retain main-pers-whm-meters
 retain main-pers-whm-secs
 
 ###########################################################
@@ -75,17 +74,6 @@ retain faces-7-pers-off
 retain faces-8-pers-off
 retain faces-9-pers-off
 
-retain faces-0-pers-whm-meters
-retain faces-1-pers-whm-meters
-retain faces-2-pers-whm-meters
-retain faces-3-pers-whm-meters
-retain faces-4-pers-whm-meters
-retain faces-5-pers-whm-meters
-retain faces-6-pers-whm-meters
-retain faces-7-pers-whm-meters
-retain faces-8-pers-whm-meters
-retain faces-9-pers-whm-meters
-
 retain faces-0-pers-whm-secs
 retain faces-1-pers-whm-secs
 retain faces-2-pers-whm-secs
@@ -125,10 +113,6 @@ retain cleaners-0-pers-off
 retain cleaners-1-pers-off
 retain cleaners-2-pers-off
 
-retain cleaners-0-pers-whm-meters
-retain cleaners-1-pers-whm-meters
-retain cleaners-2-pers-whm-meters
-
 retain cleaners-0-pers-whm-secs
 retain cleaners-1-pers-whm-secs
 retain cleaners-2-pers-whm-secs
@@ -146,7 +130,6 @@ retain unidevs-0-pers-on
 sets unidevs-0-pers-off 0.0
 retain unidevs-0-pers-off
 
-retain unidevs-0-pers-whm-meters
 retain unidevs-0-pers-whm-secs
 
 ###########################################################
@@ -194,13 +177,6 @@ retain bevel-0-pers-mot-2-off
 retain bevel-1-pers-mot-0-off
 retain bevel-1-pers-mot-1-off
 retain bevel-1-pers-mot-2-off
-
-retain bevel-0-pers-mot-0-whm-meters
-retain bevel-0-pers-mot-1-whm-meters
-retain bevel-0-pers-mot-2-whm-meters
-retain bevel-1-pers-mot-0-whm-meters
-retain bevel-1-pers-mot-1-whm-meters
-retain bevel-1-pers-mot-2-whm-meters
 
 retain bevel-0-pers-mot-0-whm-secs
 retain bevel-0-pers-mot-1-whm-secs

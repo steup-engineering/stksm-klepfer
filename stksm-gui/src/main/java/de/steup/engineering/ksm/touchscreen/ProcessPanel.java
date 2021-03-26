@@ -46,7 +46,7 @@ public class ProcessPanel extends JPanel implements UpdatePanelInterface {
         ParamSetNamePanel paramPanel = new ParamSetNamePanel("Maschinenparameter");
         updatePanels.add(paramPanel);
         contentPanel.add(paramPanel);
-        
+
         List<MotorData> faceMotors = new ArrayList<>();
         for (int i = 0; i < Main.FACE_COUNT; i++) {
             faceMotors.add(new MotorData(
@@ -63,7 +63,7 @@ public class ProcessPanel extends JPanel implements UpdatePanelInterface {
         MotorPanel fp = new MotorPanel("Köpfe", faceMotors, true, true);
         updatePanels.add(fp);
         contentPanel.add(fp);
-        
+
         JPanel rp = new MotorBasePanel("Rollen", 1);
         contentPanel.add(rp);
 
@@ -105,7 +105,7 @@ public class ProcessPanel extends JPanel implements UpdatePanelInterface {
         dp = new DevPanel("Armierung/Wassernase", uniMotors, null, null, false, guiInData.getUnidevs()[0]);
         updatePanels.add(dp);
         uniPanel.add(dp);
-        
+
         contentPanel.add(uniPanel);
 
         JPanel bevelPanel = new JPanel();

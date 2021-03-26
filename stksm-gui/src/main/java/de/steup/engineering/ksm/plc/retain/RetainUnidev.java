@@ -21,7 +21,7 @@ public class RetainUnidev implements Serializable {
 
     private static final long serialVersionUID = 7356938339789650648L;
 
-    @XmlAttribute(name ="pos")
+    @XmlAttribute(name = "pos")
     private double pos;
     @XmlTransient
     private final RetainWhm whm;

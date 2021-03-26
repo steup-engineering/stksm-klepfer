@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package de.steup.engineering.ksm.plc.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,7 +17,7 @@ public class GuiInMain {
     private String processName = null;
     @JsonIgnore
     private String paramSetName = null;
-    
+
     private boolean resetError;
     private double beltFeed;
     private final GuiInStation faces[] = new GuiInStation[Main.FACE_COUNT];
@@ -28,19 +27,19 @@ public class GuiInMain {
     private final GuiInBevel bevels[] = new GuiInBevel[Main.BEVEL_COUNT];
 
     public GuiInMain() {
-        for (int i=0; i<Main.FACE_COUNT; i++) {
+        for (int i = 0; i < Main.FACE_COUNT; i++) {
             faces[i] = new GuiInStation();
         }
-        for (int i=0; i<Main.ROLLS_COUNT; i++) {
+        for (int i = 0; i < Main.ROLLS_COUNT; i++) {
             rolls[i] = new GuiInStation();
         }
-        for (int i=0; i<Main.CLEANER_COUNT; i++) {
+        for (int i = 0; i < Main.CLEANER_COUNT; i++) {
             cleaners[i] = new GuiInStation();
         }
-        for (int i=0; i<Main.UNIDEV_COUNT; i++) {
+        for (int i = 0; i < Main.UNIDEV_COUNT; i++) {
             unidevs[i] = new GuiInUnidev();
         }
-        for (int i=0; i<Main.BEVEL_COUNT; i++) {
+        for (int i = 0; i < Main.BEVEL_COUNT; i++) {
             bevels[i] = new GuiInBevel();
         }
     }

@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package de.steup.engineering.ksm.plc.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -15,7 +14,7 @@ public class GuiInStation implements GuiInStationInterface {
 
     private boolean manu;
     private boolean ena;
-    
+
     @JsonIgnore
     private String caption;
 

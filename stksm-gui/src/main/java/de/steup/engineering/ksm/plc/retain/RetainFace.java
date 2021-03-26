@@ -21,11 +21,11 @@ public class RetainFace implements PosOffsetInterface, Serializable {
 
     private static final long serialVersionUID = -6750150560154553901L;
 
-    @XmlAttribute(name ="pos")
+    @XmlAttribute(name = "pos")
     private double pos;
-    @XmlAttribute(name ="onOffset")
+    @XmlAttribute(name = "onOffset")
     private double onOffset;
-    @XmlAttribute(name ="offOffset")
+    @XmlAttribute(name = "offOffset")
     private double offOffset;
     @XmlTransient
     private final RetainWhm whm;

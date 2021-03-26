@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -27,12 +26,6 @@ public class RetainFace implements PosOffsetInterface, Serializable {
     private double onOffset;
     @XmlAttribute(name = "offOffset")
     private double offOffset;
-    @XmlTransient
-    private final RetainWhm whm;
-
-    public RetainFace() {
-        whm = new RetainWhm();
-    }
 
     @Override
     public double getOffOffset() {
@@ -62,9 +55,5 @@ public class RetainFace implements PosOffsetInterface, Serializable {
     @Override
     public void setPos(double pos) {
         this.pos = pos;
-    }
-
-    public RetainWhm getWhm() {
-        return whm;
     }
 }

@@ -10,7 +10,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -32,12 +31,8 @@ public class RetainMain implements Serializable {
     private final RetainBevel bevels[] = new RetainBevel[Main.BEVEL_COUNT];
     @XmlElement(name = "roll")
     private final RetainFace rolls[] = new RetainFace[Main.ROLLS_COUNT];
-    @XmlTransient
-    private final RetainWhm whm;
 
     public RetainMain() {
-        whm = new RetainWhm();
-
         for (int i = 0; i < Main.FACE_COUNT; i++) {
             faces[i] = new RetainFace();
         }
@@ -73,9 +68,5 @@ public class RetainMain implements Serializable {
 
     public RetainFace[] getRolls() {
         return rolls;
-    }
-
-    public RetainWhm getWhm() {
-        return whm;
     }
 }

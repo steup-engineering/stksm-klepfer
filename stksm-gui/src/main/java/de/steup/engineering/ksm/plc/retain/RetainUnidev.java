@@ -9,7 +9,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -23,12 +22,6 @@ public class RetainUnidev implements Serializable {
 
     @XmlAttribute(name = "pos")
     private double pos;
-    @XmlTransient
-    private final RetainWhm whm;
-
-    public RetainUnidev() {
-        whm = new RetainWhm();
-    }
 
     public double getPos() {
         return pos;
@@ -36,9 +29,5 @@ public class RetainUnidev implements Serializable {
 
     public void setPos(double pos) {
         this.pos = pos;
-    }
-
-    public RetainWhm getWhm() {
-        return whm;
     }
 }

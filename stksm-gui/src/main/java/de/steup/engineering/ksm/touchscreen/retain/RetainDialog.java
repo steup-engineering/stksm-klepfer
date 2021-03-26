@@ -23,6 +23,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import de.steup.engineering.ksm.Main;
+import de.steup.engineering.ksm.plc.entities.GuiInBevel;
+import de.steup.engineering.ksm.plc.entities.GuiInMain;
+import de.steup.engineering.ksm.plc.entities.GuiInStationInterface;
+import java.awt.Window;
 import java.io.IOException;
 
 /**
@@ -33,39 +37,32 @@ public class RetainDialog extends JDialog {
 
     private static final long serialVersionUID = 4896331450411664212L;
 
-    private static final String BEVEL_CAPTIONS[] = {
-        "Fase unten",
-        "Fase oben"
-    };
-
-    public static void showDialog() {
+    public static void showDialog(Window owner) {
         Machine mach = MachineThread.getInstance().getMachine();
         if (!mach.isConnected()) {
-            JOptionPane.showMessageDialog(Main.getMainFrame(), "Maschine ist offline.", "Verbindungsfehler", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(owner, "Maschine ist offline.", "Verbindungsfehler", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        RetainMain retainData = new RetainMain();
-
+        RetainMain retainData;
         try {
-            mach.readRetainData(retainData);
+            retainData = mach.readRetainData();
         } catch (PlcRestException ex) {
-            JOptionPane.showMessageDialog(Main.getMainFrame(), String.format("REST-Fehler %d.", ex.getStatus()), "Verbindungsfehler", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(owner, String.format("REST-Fehler %d.", ex.getStatus()), "Verbindungsfehler", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
-        RetainDialog dlg = new RetainDialog(retainData);
-        dlg.setAlwaysOnTop(true);
+        RetainDialog dlg = new RetainDialog(owner, retainData);
         dlg.setVisible(true);
     }
 
     private RetainMain retainData;
     private JPanel spc;
 
-    public RetainDialog(RetainMain retainData) {
-        super(Main.getMainFrame(), "Retain Values", true);
+    public RetainDialog(Window owner, RetainMain retainData) {
+        super(owner, "Retain Values", ModalityType.APPLICATION_MODAL);
 
         super.setResizable(false);
-
         super.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         Container pane = super.getContentPane();
@@ -91,13 +88,10 @@ public class RetainDialog extends JDialog {
 
         JButton loadButton = new JButton("Laden ...");
 
-        // used to referenced to this in ebmedded classes
-        final RetainDialog context = this;
-
         loadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                LoadDialog.showDialog(new PersUtil(), context);
+                LoadDialog.showDialog(RetainDialog.this, new PersUtil(), RetainDialog.this);
             }
         });
         buttonPanel.add(loadButton);
@@ -106,7 +100,7 @@ public class RetainDialog extends JDialog {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SaveDialog.showDialog(context.retainData);
+                SaveDialog.showDialog(RetainDialog.this, RetainDialog.this.retainData);
             }
         });
         buttonPanel.add(saveButton);
@@ -118,14 +112,14 @@ public class RetainDialog extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 Machine mach = MachineThread.getInstance().getMachine();
                 if (!mach.isConnected()) {
-                    JOptionPane.showMessageDialog(Main.getMainFrame(), "Maschine ist offline.", "Verbindungsfehler", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RetainDialog.this, "Maschine ist offline.", "Verbindungsfehler", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 try {
-                    mach.writeRetainData(context.retainData);
+                    mach.writeRetainData(RetainDialog.this.retainData);
                 } catch (PlcRestException ex) {
-                    JOptionPane.showMessageDialog(Main.getMainFrame(), String.format("ADS-Fehler %d (%s).", ex.getStatus(), ex.getMessage()), "Verbindungsfehler", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(RetainDialog.this, String.format("ADS-Fehler %d (%s).", ex.getStatus(), ex.getMessage()), "Verbindungsfehler", JOptionPane.ERROR_MESSAGE);
                 }
 
                 dispose();
@@ -164,36 +158,63 @@ public class RetainDialog extends JDialog {
 
         super.setSize(700, 700);
 
-        super.setLocationRelativeTo(Main.getMainFrame());
+        super.setLocationRelativeTo(owner);
+    }
+
+    static public String getCaption(int index, String name, GuiInStationInterface guiInterface) {
+        String guiCaption = guiInterface.getCaption();
+        if (guiCaption == null) {
+            return String.format("%s %d", name, index + 1);
+        }
+
+        return String.format("%s %d [%s]", name, index + 1, guiCaption);
     }
 
     public final void setRetainData(RetainMain retainData) {
         this.retainData = retainData;
         this.spc.removeAll();
 
+        GuiInMain guiInData = MachineThread.getInstance().getGuiInData();
+
         RetainFace faces[] = this.retainData.getFaces();
+        GuiInStationInterface guiFaces[] = guiInData.getFaces();
         for (int i = 0; i < Main.FACE_COUNT; i++) {
-            spc.add(new PosOffsetRetainPanel(String.format("Flächenmotor %d", i + 1), faces[i]));
+            spc.add(new PosOffsetRetainPanel(
+                    this,
+                    getCaption(i, "Flächenmotor", guiFaces[i]),
+                    faces[i]));
         }
 
         RetainFace cleaners[] = retainData.getCleaners();
+        GuiInStationInterface guiCleaners[] = guiInData.getCleaners();
         for (int i = 0; i < Main.CLEANER_COUNT; i++) {
-            spc.add(new PosOffsetRetainPanel(String.format("Cleaner %d", i + 1), cleaners[i]));
+            spc.add(new PosOffsetRetainPanel(
+                    this,
+                    getCaption(i, "Cleaner", guiCleaners[i]),
+                    cleaners[i]));
         }
 
         RetainFace unidevs[] = retainData.getUnidevs();
+        GuiInStationInterface guiUnidevs[] = guiInData.getUnidevs();
         for (int i = 0; i < Main.UNIDEV_COUNT; i++) {
-            spc.add(new PosOffsetRetainPanel(String.format("Universalaggregat %d", i + 1), unidevs[i]));
+            spc.add(new PosOffsetRetainPanel(
+                    this,
+                    getCaption(i, "Universalaggregat", guiUnidevs[i]),
+                    unidevs[i]));
         }
 
         RetainBevel bevels[] = retainData.getBevels();
-        for (int i = 0; i < Main.BEVEL_COUNT; i++) {
-            spc.add(new BevelRetainPanel(BEVEL_CAPTIONS[i], bevels[i]));
-        }
+        GuiInBevel guiBevels[] = guiInData.getBevels();
+        spc.add(new BevelRetainPanel(this, "Fase unten", bevels[0], guiBevels[0]));
+        spc.add(new BevelRetainPanel(this, "Fase oben", bevels[1], guiBevels[1]));
 
         RetainFace rolls[] = retainData.getRolls();
+        GuiInStationInterface guiRolls[] = guiInData.getRolls();
         for (int i = 0; i < Main.ROLLS_COUNT; i++) {
-            spc.add(new PosOffsetRetainPanel(String.format("Rolle %d", i + 1), rolls[i]));
+            spc.add(new PosOffsetRetainPanel(
+                    this,
+                    getCaption(i, "Rolle", guiRolls[i]),
+                    rolls[i]));
         }
 
         super.validate();

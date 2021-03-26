@@ -13,6 +13,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
@@ -29,7 +30,7 @@ public class ProcessPanel extends JPanel implements UpdatePanelInterface {
 
     private final List<UpdatePanelInterface> updatePanels = new ArrayList<>();
 
-    public ProcessPanel() {
+    public ProcessPanel(Window owner) {
         super();
         setBorder(BorderFactory.createEtchedBorder());
 
@@ -43,7 +44,7 @@ public class ProcessPanel extends JPanel implements UpdatePanelInterface {
         GuiInMain guiInData = MachineThread.getInstance().getGuiInData();
         GuiOutMain guiOutData = MachineThread.getInstance().getGuiOutData();
 
-        ParamSetNamePanel paramPanel = new ParamSetNamePanel("Maschinenparameter");
+        ParamSetNamePanel paramPanel = new ParamSetNamePanel(owner, "Maschinenparameter");
         updatePanels.add(paramPanel);
         contentPanel.add(paramPanel);
 
@@ -60,7 +61,7 @@ public class ProcessPanel extends JPanel implements UpdatePanelInterface {
                     guiInData.getCleaners()[i],
                     guiOutData.getCleaners()[i]));
         }
-        MotorPanel fp = new MotorPanel("Köpfe", faceMotors, true, true);
+        MotorPanel fp = new MotorPanel(owner, "Köpfe", faceMotors, true, true);
         updatePanels.add(fp);
         contentPanel.add(fp);
 
@@ -74,7 +75,7 @@ public class ProcessPanel extends JPanel implements UpdatePanelInterface {
                     guiInData.getRolls()[i],
                     guiOutData.getRolls()[i]));
         }
-        MotorPanel rop = new MotorPanel(null, rollMotorsOdd, true, false);
+        MotorPanel rop = new MotorPanel(owner, null, rollMotorsOdd, true, false);
         updatePanels.add(rop);
         rp.add(rop);
 
@@ -85,7 +86,7 @@ public class ProcessPanel extends JPanel implements UpdatePanelInterface {
                     guiInData.getRolls()[i],
                     guiOutData.getRolls()[i]));
         }
-        MotorPanel rep = new MotorPanel(null, rollMotorsEven, true, false);
+        MotorPanel rep = new MotorPanel(owner, null, rollMotorsEven, true, false);
         updatePanels.add(rep);
         rp.add(rep);
 
@@ -96,13 +97,13 @@ public class ProcessPanel extends JPanel implements UpdatePanelInterface {
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new GridLayout(0, 1));
 
-        InfoPanel bp = new InfoPanel("Prozesswerte");
+        InfoPanel bp = new InfoPanel(owner, "Prozesswerte");
         updatePanels.add(bp);
         uniPanel.add(bp);
 
         List<MotorData> uniMotors = new ArrayList<>();
         uniMotors.add(new MotorData("Multifnk", guiInData.getUnidevs()[0], guiOutData.getUnidevs()[0]));
-        dp = new DevPanel("Armierung/Wassernase", uniMotors, null, null, false, guiInData.getUnidevs()[0]);
+        dp = new DevPanel(owner, "Armierung/Wassernase", uniMotors, null, null, false, guiInData.getUnidevs()[0]);
         updatePanels.add(dp);
         uniPanel.add(dp);
 
@@ -110,6 +111,7 @@ public class ProcessPanel extends JPanel implements UpdatePanelInterface {
 
         JPanel bevelPanel = new JPanel();
         bevelPanel.setLayout(new GridLayout(0, 2));
+
         List<MotorData> bevelUpperMotors = new ArrayList<>();
         bevelUpperMotors.add(new MotorData("Fräser", guiInData.getBevels()[1].getMotors()[0], guiOutData.getBevels()[1].getMotors()[0]));
         bevelUpperMotors.add(new MotorData("Poli 1", guiInData.getBevels()[1].getMotors()[1], guiOutData.getBevels()[1].getMotors()[1]));
@@ -125,9 +127,10 @@ public class ProcessPanel extends JPanel implements UpdatePanelInterface {
                 }
             }
         };
-        dp = new DevPanel("Fase oben", bevelUpperMotors, bevelUpperCalibAction, "Fasenbreite [mm]", true, guiInData.getBevels()[1]);
+        dp = new DevPanel(owner, "Fase oben", bevelUpperMotors, bevelUpperCalibAction, "Fasenbreite [mm]", true, guiInData.getBevels()[1]);
         updatePanels.add(dp);
         bevelPanel.add(dp);
+
         List<MotorData> bevelLowerMotors = new ArrayList<>();
         bevelLowerMotors.add(new MotorData("Fräser", guiInData.getBevels()[0].getMotors()[0], guiOutData.getBevels()[0].getMotors()[0]));
         bevelLowerMotors.add(new MotorData("Poli 1", guiInData.getBevels()[0].getMotors()[1], guiOutData.getBevels()[0].getMotors()[1]));
@@ -143,7 +146,7 @@ public class ProcessPanel extends JPanel implements UpdatePanelInterface {
                 }
             }
         };
-        dp = new DevPanel("Fase unten", bevelLowerMotors, bevelLowerCalibAction, "Fasenbreite [mm]", true, guiInData.getBevels()[0]);
+        dp = new DevPanel(owner, "Fase unten", bevelLowerMotors, bevelLowerCalibAction, "Fasenbreite [mm]", true, guiInData.getBevels()[0]);
         updatePanels.add(dp);
         bevelPanel.add(dp);
         contentPanel.add(bevelPanel);

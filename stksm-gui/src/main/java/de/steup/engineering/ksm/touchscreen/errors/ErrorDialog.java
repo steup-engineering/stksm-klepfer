@@ -20,7 +20,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
-import de.steup.engineering.ksm.Main;
+import java.awt.Window;
 
 /**
  *
@@ -30,17 +30,40 @@ public class ErrorDialog extends JDialog {
 
     private static final long serialVersionUID = 3313303411371387035L;
 
-    private static final String[] ERRORS = {
-        "Notaus",
-        "Türe offen",
-        "Luftdruck fehlt",
-        "Wasserdruck fehlt",
-        "Motorschutz ausgelöst",
-        "Fehler Bandantrieb",
-        "Fehler Universalagregat",
-        "Fehler Fasenfräser unten",
-        "Fehler Fasenfräser oben",
-        "Fehler Bussystem"
+    private static class ErrorItem {
+
+        private final int mask;
+        private final String caption;
+
+        public ErrorItem(int mask, String caption) {
+            this.mask = mask;
+            this.caption = caption;
+        }
+
+        public int getMask() {
+            return mask;
+        }
+
+        public String getCaption() {
+            return caption;
+        }
+
+        public boolean isActive(int error) {
+            return (error & mask) != 0;
+        }
+    };
+
+    private static final ErrorItem[] ERRORS = {
+        new ErrorItem(GuiOutMain.ERR_EMERG_STOP, "Notaus"),
+        new ErrorItem(GuiOutMain.ERR_DOOR_INTERLOCK, "Türe offen"),
+        new ErrorItem(GuiOutMain.ERR_AIR_PRESS, "Luftdruck fehlt"),
+        new ErrorItem(GuiOutMain.ERR_WATER_PRESS, "Wasserdruck fehlt"),
+        new ErrorItem(GuiOutMain.ERR_MOTOR_PROT, "Motorschutz ausgelöst"),
+        new ErrorItem(GuiOutMain.ERR_BELT, "Fehler Bandantrieb"),
+        new ErrorItem(GuiOutMain.ERR_UNIDEV, "Fehler Universalagregat"),
+        new ErrorItem(GuiOutMain.ERR_BEVEL_LOWER, "Fehler Fasenfräser unten"),
+        new ErrorItem(GuiOutMain.ERR_BEVEL_UPPER, "Fehler Fasenfräser oben"),
+        new ErrorItem(GuiOutMain.ERR_BUS_SYSTEM, "Fehler Bussystem")
     };
 
     private final JCheckBox errorBoxes[];
@@ -58,24 +81,24 @@ public class ErrorDialog extends JDialog {
                         err = guiOutData.getErrors();
                     }
                     for (int i = 0; i < errorBoxes.length; i++) {
+                        ErrorItem ei = ERRORS[i];
                         JCheckBox errorBox = errorBoxes[i];
-                        errorBox.setSelected((err & (1 << i)) != 0);
+                        errorBox.setSelected(ei.isActive(err));
                     }
                 }
             });
         }
     };
 
-    public static void showDialog() {
-        ErrorDialog dlg = new ErrorDialog();
+    public static void showDialog(Window owner) {
+        ErrorDialog dlg = new ErrorDialog(owner);
         MachineThread.getInstance().addUpdateListener(dlg.updateListener);
-        dlg.setAlwaysOnTop(true);
         dlg.setVisible(true);
         MachineThread.getInstance().removeUpdateListener(dlg.updateListener);
     }
 
-    public ErrorDialog() {
-        super(Main.getMainFrame(), "Fehlerstatus", true);
+    public ErrorDialog(Window owner) {
+        super(owner, "Fehlerstatus", ModalityType.APPLICATION_MODAL);
 
         super.setResizable(false);
 
@@ -93,7 +116,8 @@ public class ErrorDialog extends JDialog {
 
         errorBoxes = new JCheckBox[ERRORS.length];
         for (int i = 0; i < ERRORS.length; i++) {
-            JCheckBox cb = new JCheckBox(ERRORS[i]);
+            ErrorItem ei = ERRORS[i];
+            JCheckBox cb = new JCheckBox(ei.getCaption());
             cb.setEnabled(false);
             spc.add(cb);
             errorBoxes[i] = cb;
@@ -137,8 +161,8 @@ public class ErrorDialog extends JDialog {
 
         pane.add(mainPanel);
 
-        super.setSize(300, 400);
+        super.setSize(400, 500);
 
-        super.setLocationRelativeTo(Main.getMainFrame());
+        super.setLocationRelativeTo(owner);
     }
 }

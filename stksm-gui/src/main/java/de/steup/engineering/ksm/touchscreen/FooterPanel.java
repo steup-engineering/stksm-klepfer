@@ -18,10 +18,10 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import de.steup.engineering.ksm.Main;
 import de.steup.engineering.ksm.process.LoadDialog;
 import de.steup.engineering.ksm.process.PersUtil;
 import de.steup.engineering.ksm.process.SaveDialog;
+import java.awt.Window;
 
 /**
  *
@@ -33,7 +33,7 @@ public class FooterPanel extends JPanel {
 
     private PersUtil persUtil = new PersUtil();
 
-    public FooterPanel(final UpdatePanelInterface loadUpdater) {
+    public FooterPanel(Window owner, final UpdatePanelInterface loadUpdater) {
         super();
         setBorder(BorderFactory.createEtchedBorder());
 
@@ -58,7 +58,7 @@ public class FooterPanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                LoadDialog.showDialog(persUtil, loadUpdater);
+                LoadDialog.showDialog(owner, persUtil, loadUpdater);
             }
         });
 
@@ -66,7 +66,7 @@ public class FooterPanel extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                SaveDialog.showDialog(persUtil, loadUpdater);
+                SaveDialog.showDialog(owner, persUtil, loadUpdater);
             }
         });
 
@@ -75,7 +75,7 @@ public class FooterPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                ErrorDialog.showDialog();
+                ErrorDialog.showDialog(owner);
             }
         });
 
@@ -85,7 +85,7 @@ public class FooterPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
 
                 if (JOptionPane.showConfirmDialog(
-                        Main.getMainFrame(),
+                        owner,
                         "Maschine wirklich herunterfahren?",
                         "Sicherheitsabfrage",
                         JOptionPane.YES_NO_OPTION) != JOptionPane.YES_OPTION) {
@@ -95,6 +95,7 @@ public class FooterPanel extends JPanel {
                 Runtime rt = Runtime.getRuntime();
                 try {
                     rt.exec("sudo shutdown -h now");
+                    System.exit(0);
                 } catch (IOException ex) {
                     // NOP
                 }
@@ -106,7 +107,7 @@ public class FooterPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                RetainDialog.showDialog();
+                RetainDialog.showDialog(owner);
             }
         });
 

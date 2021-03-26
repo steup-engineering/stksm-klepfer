@@ -30,26 +30,6 @@ public class RetainUnidev implements Serializable {
         whm = new RetainWhm();
     }
 
-    public static void update(RetainUnidev[] dst, RetainUnidev[] src) {
-        if (src == null) {
-            return;
-        }
-
-        for (int i = 0; i < Math.min(src.length, dst.length); i++) {
-            dst[i].update(src[i]);
-        }
-    }
-
-    public void update(RetainUnidev src) {
-        if (src == null) {
-            return;
-        }
-
-        pos = src.pos;
-
-        whm.update(src.whm);
-    }
-
     public double getPos() {
         return pos;
     }

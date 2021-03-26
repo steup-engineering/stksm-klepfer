@@ -11,12 +11,12 @@ import de.steup.engineering.ksm.plc.entities.GuiInStationInterface;
 import de.steup.engineering.ksm.plc.entities.GuiOutStationInterface;
 import de.steup.engineering.ksm.touchscreen.dialogs.StringMouseListener;
 import de.steup.engineering.ksm.touchscreen.dialogs.StringSetter;
+import de.steup.engineering.ksm.touchscreen.util.MachButtonListener;
 import de.steup.engineering.ksm.touchscreen.util.MotorData;
 import java.awt.Color;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,7 +37,7 @@ public class MotorPanel extends MotorBasePanel implements UpdatePanelInterface {
     private final List<MotorData> motors;
     private Color buttonDefaultColor = null;
 
-    public MotorPanel(String title, List<MotorData> motors, boolean hasLabel, boolean hasEnable) {
+    public MotorPanel(Window owner, String title, List<MotorData> motors, boolean hasLabel, boolean hasEnable) {
         super(title, motors.size());
 
         motors = new ArrayList<>(motors);
@@ -62,7 +62,7 @@ public class MotorPanel extends MotorBasePanel implements UpdatePanelInterface {
                             motor.setCaption(value);
                         }
                     };
-                    nt.addMouseListener(new StringMouseListener("Motor Name", nt, 1, 16, setter));
+                    nt.addMouseListener(new StringMouseListener(owner, "Motor Name", nt, 1, 16, setter));
                 }
                 captionText.add(nt);
                 add(nt);
@@ -71,6 +71,8 @@ public class MotorPanel extends MotorBasePanel implements UpdatePanelInterface {
 
         if (hasEnable) {
             for (int i = 0; i < motors.size(); i++) {
+                final MotorData motor = motors.get(i);
+
                 final JButton nb = new JButton("aktiv");
                 if (buttonDefaultColor == null) {
                     buttonDefaultColor = nb.getBackground();
@@ -78,7 +80,7 @@ public class MotorPanel extends MotorBasePanel implements UpdatePanelInterface {
                 enaButton.add(nb);
                 add(nb);
 
-                final GuiInStationInterface stationIn = motors.get(i).getInData();
+                final GuiInStationInterface stationIn = motor.getInData();
                 nb.addActionListener(new ActionListener() {
 
                     @Override
@@ -97,41 +99,18 @@ public class MotorPanel extends MotorBasePanel implements UpdatePanelInterface {
         }
 
         for (int i = 0; i < motors.size(); i++) {
+            final MotorData motor = motors.get(i);
+
             final JButton nb = new JButton("manu");
             final Color defaultColor = nb.getBackground();
             add(nb);
 
-            final GuiInStationInterface stationIn = motors.get(i).getInData();
-            final GuiOutStationInterface stationOut = motors.get(i).getOutData();
-            nb.addMouseListener(new MouseListener() {
-
+            final GuiInStationInterface stationIn = motor.getInData();
+            final GuiOutStationInterface stationOut = motor.getOutData();
+            nb.addMouseListener(new MachButtonListener() {
                 @Override
-                public void mouseClicked(MouseEvent e) {
-                    // NOP
-                }
-
-                @Override
-                public void mousePressed(MouseEvent e) {
-                    synchronized (MachineThread.getInstance().getGuiInData()) {
-                        stationIn.setManu(true);
-                    }
-                }
-
-                @Override
-                public void mouseReleased(MouseEvent e) {
-                    synchronized (MachineThread.getInstance().getGuiInData()) {
-                        stationIn.setManu(false);
-                    }
-                }
-
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    // NOP
-                }
-
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    // NOP
+                protected void stateChanged(GuiInMain guiInData, boolean pressed) {
+                    stationIn.setManu(pressed);
                 }
             });
 

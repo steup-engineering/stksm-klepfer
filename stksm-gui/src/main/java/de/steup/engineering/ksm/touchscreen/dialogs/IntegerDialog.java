@@ -4,6 +4,7 @@
  */
 package de.steup.engineering.ksm.touchscreen.dialogs;
 
+import java.awt.Window;
 import javax.swing.JTextField;
 
 /**
@@ -14,17 +15,16 @@ public class IntegerDialog extends NumDialog {
 
     private static final long serialVersionUID = -7380894324065576936L;
 
-    private int min = Integer.MIN_VALUE;
-    private int max = Integer.MAX_VALUE;
+    private final int min;
+    private final int max;
 
-    public static void showDialog(String title, JTextField dest, int min, int max) {
-        NumDialog dlg = new IntegerDialog(title, dest, min, max);
-        dlg.setAlwaysOnTop(true);
+    public static void showDialog(Window owner, String title, JTextField dest, int min, int max) {
+        NumDialog dlg = new IntegerDialog(owner, title, dest, min, max);
         dlg.setVisible(true);
     }
 
-    public IntegerDialog(String title, JTextField dest, int min, int max) {
-        super(title, dest);
+    public IntegerDialog(Window owner, String title, JTextField dest, int min, int max) {
+        super(owner, title, dest, null);
         this.min = min;
         this.max = max;
     }
@@ -36,22 +36,22 @@ public class IntegerDialog extends NumDialog {
         try {
             val = Integer.parseInt(inputField.getText());
         } catch (NumberFormatException ex) {
-            statusLabel.setText("Invalid Integer Number.");
+            statusLabel.setText("Ungültige Integerzahl.");
             return;
         }
 
         if (val > max) {
-            statusLabel.setText(String.format("Maximum value of %s exceeded.", Integer.toString(max)));
+            statusLabel.setText(String.format("Maximalwert %d überschritten.", max));
             return;
         }
 
         if (val < min) {
-            statusLabel.setText(String.format("Minimum value of %s exceeded.", Integer.toString(min)));
+            statusLabel.setText(String.format("Minimalwert %d unterschritten.", min));
             return;
         }
 
         if (dest != null) {
-            dest.setText(Double.toString(val));
+            dest.setText(Integer.toString(val));
         }
         dispose();
     }

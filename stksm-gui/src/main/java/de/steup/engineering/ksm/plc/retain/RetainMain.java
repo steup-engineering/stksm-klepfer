@@ -55,20 +55,6 @@ public class RetainMain implements Serializable {
         }
     }
 
-    public void update(RetainMain src) {
-        if (src == null) {
-            return;
-        }
-
-        RetainFace.update(faces, src.faces);
-        RetainFace.update(cleaners, src.cleaners);
-        RetainFace.update(unidevs, src.unidevs);
-        RetainBevel.update(bevels, src.bevels);
-        RetainFace.update(rolls, src.rolls);
-
-        whm.update(src.whm);
-    }
-
     public RetainBevel[] getBevels() {
         return bevels;
     }

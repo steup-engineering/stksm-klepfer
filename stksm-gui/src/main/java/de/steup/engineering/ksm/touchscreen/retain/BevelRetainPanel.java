@@ -5,8 +5,8 @@
 package de.steup.engineering.ksm.touchscreen.retain;
 
 import de.steup.engineering.ksm.Main;
-import de.steup.engineering.ksm.plc.rest.MachineThread;
-import de.steup.engineering.ksm.plc.entities.GuiInMain;
+import de.steup.engineering.ksm.plc.entities.GuiInBevel;
+import de.steup.engineering.ksm.plc.entities.GuiInStationInterface;
 import de.steup.engineering.ksm.plc.retain.RetainBevel;
 import de.steup.engineering.ksm.plc.retain.RetainFace;
 import de.steup.engineering.ksm.touchscreen.dialogs.FloatMouseListener;
@@ -14,6 +14,8 @@ import de.steup.engineering.ksm.touchscreen.dialogs.FloatSetter;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Window;
+import java.text.DecimalFormat;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -29,9 +31,11 @@ public class BevelRetainPanel extends JPanel {
 
     private static final long serialVersionUID = -1702642935703092092L;
 
+    private final static DecimalFormat DIST_FORMAT = new DecimalFormat("#0.0");
+
     private static final int TEXT_FIELD_COLUMNS = 10;
 
-    public BevelRetainPanel(String title, final RetainBevel retainData) {
+    public BevelRetainPanel(Window owner, String title, final RetainBevel retainData, GuiInBevel guiInData) {
 
         BoxLayout layout = new BoxLayout(this, BoxLayout.Y_AXIS);
         setLayout(layout);
@@ -56,28 +60,28 @@ public class BevelRetainPanel extends JPanel {
 
             @Override
             public void setValue(double value) {
-
-                GuiInMain guiInData = MachineThread.getInstance().getGuiInData();
-                synchronized (guiInData) {
-                    retainData.setWidthOffset(value);
-                }
+                retainData.setWidthOffset(value);
             }
         };
-        addParamItem(globalPanel, labelConst, textConst, "Breiten-Offset [mm]", -10.0, 10.0, retainData.getWidthOffset(), widthOffsetSetter);
+        addParamItem(owner, globalPanel, labelConst, textConst, "Breiten-Offset [mm]", -10.0, 10.0, retainData.getWidthOffset(), DIST_FORMAT, widthOffsetSetter);
 
         add(globalPanel);
 
-        add(new PosOffsetRetainPanel("Positionierung", retainData.getPosctl()));
+        add(new PosOffsetRetainPanel(owner, "Positionierung", retainData.getPosctl()));
 
         RetainFace motors[] = retainData.getMotors();
+        GuiInStationInterface guiMotors[] = guiInData.getMotors();
         for (int i = 0; i < Main.BEVEL_MOTOR_COUNT; i++) {
-            add(new PosOffsetRetainPanel(String.format("Motor %d", i + 1), motors[i]));
+            add(new PosOffsetRetainPanel(
+                    owner,
+                    RetainDialog.getCaption(i, "Motor", guiMotors[i]),
+                    motors[i]));
         }
 
         setBorder(BorderFactory.createTitledBorder(title));
     }
 
-    private JTextField addParamItem(JPanel panel, GridBagConstraints labelConst, GridBagConstraints textConst, String labelText, double min, double max, double deflt, FloatSetter setter) {
+    private JTextField addParamItem(Window owner, JPanel panel, GridBagConstraints labelConst, GridBagConstraints textConst, String labelText, double min, double max, double deflt, DecimalFormat format, FloatSetter setter) {
         JLabel label = new JLabel(labelText + ": ");
         label.setHorizontalAlignment(SwingConstants.RIGHT);
         panel.add(label, labelConst);
@@ -86,8 +90,8 @@ public class BevelRetainPanel extends JPanel {
         final JTextField textField = new JTextField(TEXT_FIELD_COLUMNS);
         textField.setEditable(false);
         textField.setBackground(Color.WHITE);
-        textField.setText(Double.toString(deflt));
-        textField.addMouseListener(new FloatMouseListener(labelText, textField, min, max, setter));
+        textField.setText(format.format(deflt));
+        textField.addMouseListener(new FloatMouseListener(owner, labelText, textField, min, max, format, setter));
         panel.add(textField, textConst);
         textConst.gridy++;
 

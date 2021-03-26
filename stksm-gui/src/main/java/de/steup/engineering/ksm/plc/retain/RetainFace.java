@@ -34,28 +34,6 @@ public class RetainFace implements PosOffsetInterface, Serializable {
         whm = new RetainWhm();
     }
 
-    public static void update(RetainFace[] dst, RetainFace[] src) {
-        if (src == null) {
-            return;
-        }
-
-        for (int i = 0; i < Math.min(src.length, dst.length); i++) {
-            dst[i].update(src[i]);
-        }
-    }
-
-    public void update(RetainFace src) {
-        if (src == null) {
-            return;
-        }
-
-        pos = src.pos;
-        onOffset = src.onOffset;
-        offOffset = src.offOffset;
-
-        whm.update(src.whm);
-    }
-
     @Override
     public double getOffOffset() {
         return offOffset;

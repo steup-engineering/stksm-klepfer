@@ -11,6 +11,8 @@ import de.steup.engineering.ksm.touchscreen.dialogs.FloatSetter;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Window;
+import java.text.DecimalFormat;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -26,12 +28,14 @@ public class BeltPanel extends JPanel implements UpdatePanelInterface {
 
     private static final long serialVersionUID = -2052546243588241937L;
 
+    private final static DecimalFormat FEED_FORMAT = new DecimalFormat("#0.0");
+
     private static final int TEXT_FIELD_COLUMNS = 10;
-    private static final double FEED_FACTOR = 1000 / 60;
+    private static final double FEED_FACTOR = 1000.0 / 60.0;
 
     private final JTextField feedText;
 
-    public BeltPanel(String title) {
+    public BeltPanel(Window owner, String title) {
         super();
         setBorder(BorderFactory.createTitledBorder(title));
 
@@ -61,7 +65,7 @@ public class BeltPanel extends JPanel implements UpdatePanelInterface {
                 }
             }
         };
-        feedText = addParamItem(this, labelConst, textConst, "Bandvorschub [m/min]", 0.2, 3.0, 1.0, feedSetter);
+        feedText = addParamItem(owner, this, labelConst, textConst, "Bandvorschub [m/min]", 0.2, 3.0, 1.0, FEED_FORMAT, feedSetter);
 
         final JTextField feedOvrField = addDisplayItem(this, labelConst, textConst, "Übersteuerung [%]");
         MachineThread.getInstance().addUpdateListener(new Runnable() {
@@ -85,7 +89,7 @@ public class BeltPanel extends JPanel implements UpdatePanelInterface {
         guiInData.setBeltFeed(1.0 * FEED_FACTOR);
     }
 
-    private JTextField addParamItem(JPanel panel, GridBagConstraints labelConst, GridBagConstraints textConst, String labelText, double min, double max, double deflt, FloatSetter setter) {
+    private JTextField addParamItem(Window owner, JPanel panel, GridBagConstraints labelConst, GridBagConstraints textConst, String labelText, double min, double max, double deflt, DecimalFormat format, FloatSetter setter) {
         JLabel label = new JLabel(labelText + ": ");
         label.setHorizontalAlignment(SwingConstants.RIGHT);
         panel.add(label, labelConst);
@@ -94,8 +98,8 @@ public class BeltPanel extends JPanel implements UpdatePanelInterface {
         final JTextField textField = new JTextField(TEXT_FIELD_COLUMNS);
         textField.setEditable(false);
         textField.setBackground(Color.WHITE);
-        textField.setText(Double.toString(deflt));
-        textField.addMouseListener(new FloatMouseListener(labelText, textField, min, max, setter));
+        textField.setText(format.format(deflt));
+        textField.addMouseListener(new FloatMouseListener(owner, labelText, textField, min, max, format, setter));
         panel.add(textField, textConst);
         textConst.gridy++;
 
@@ -120,7 +124,7 @@ public class BeltPanel extends JPanel implements UpdatePanelInterface {
     public void update() {
         GuiInMain guiInData = MachineThread.getInstance().getGuiInData();
         synchronized (guiInData) {
-            feedText.setText(Double.toString(guiInData.getBeltFeed() / FEED_FACTOR));
+            feedText.setText(FEED_FORMAT.format(guiInData.getBeltFeed() / FEED_FACTOR));
         }
     }
 }

@@ -16,8 +16,8 @@ JAVADIR="$LINUXCNC_HOME/java"
 cd $JAVADIR
 java \
   -Dswing.aatext=true \
-  -Dswing.plaf.metal.controlFont=SansSerif-18 \
-  -Dswing.plaf.metal.userFont=SansSerif-18 \
+  -Dswing.plaf.metal.controlFont=SansSerif-12 \
+  -Dswing.plaf.metal.userFont=SansSerif-12 \
   -jar stksm-klepfer-gui.jar \
   "$REST_URL" "$PROC_DIR" "$PARAM_DIR"
 

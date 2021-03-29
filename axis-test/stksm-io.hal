@@ -1,163 +1,165 @@
+net ec-slaves-responding <= lcec.slaves-responding 
+net ec-all-op <= lcec.all-op 
+
 # 50A2 EL1018
 net ctrl-voltage <= lcec.0.50A2.din-0
-net motor-prot-ok <= lcec.0.50A2.din-1
-net water-ok <= lcec.0.50A2.din-2
-net air-ok <= lcec.0.50A2.din-3
-net mat-sens-side <= lcec.0.50A2.din-5
-net belt-amp-ok <= lcec.0.50A2.din-6
-net emerg-stop-ok <= lcec.0.50A2.din-7
+net motor-protection-ok <= lcec.0.50A2.din-1
+net water-press-ok <= lcec.0.50A2.din-2
+net air-press-ok <= lcec.0.50A2.din-3
+net mat-switch-side <= lcec.0.50A2.din-5
+net amp-ready <= lcec.0.50A2.din-6
+net door-interlock <= lcec.0.50A2.din-7
 
 # 50A3 EL1018
-net belt-stop <= lcec.0.50A3.din-0-not
+net belt-stop <= lcec.0.50A3.din-0
 net belt-start <= lcec.0.50A3.din-1
-net belt-speed-inc <= lcec.0.50A3.din-2
-net belt-speed-dec <= lcec.0.50A3.din-3
-net mat-sens-top <= lcec.0.50A3.din-4
-net mill-bot-amp-ok <= lcec.0.50A3.din-6
-net mill-top-amp-ok <= lcec.0.50A3.din-7
+net speed-inc <= lcec.0.50A3.din-2
+net speed-dec <= lcec.0.50A3.din-3
+net mat-switch-top <= lcec.0.50A3.din-4
+net bevel-0-amp-ready <= lcec.0.50A3.din-6
+net bevel-1-amp-ready <= lcec.0.50A3.din-7
 
 # 50A4 EL1004
-net revolver-pos-0 <= lcec.0.50A4.din-0
-net revolver-pos-1 <= lcec.0.50A4.din-1
-net revolver-pos-2 <= lcec.0.50A4.din-2
-
-# pos input-mask
-# 0   3
-# 1   7
-# 2   5
-# 3   4
-# 4   6
-# 5   1
+net unidevs-0-sw-0 <= lcec.0.50A4.din-0
+net unidevs-0-sw-1 <= lcec.0.50A4.din-1
+net unidevs-0-sw-2 <= lcec.0.50A4.din-2
 
 # 50A5 EL2008
-setp lcec.0.50A5.dout-0 1
 #net plc-run => lcec.0.50A5.dout-0
-net belt-amp-ena => lcec.0.50A5.dout-1
-#net mill-amps-ena => lcec.0.50A5.dout-2
+net amp-enable => lcec.0.50A5.dout-1
+#net bevel-amps-ena => lcec.0.50A5.dout-2
+net water-on => lcec.0.50A5.dout-3
+
+setp lcec.0.50A5.dout-0 1
 net emc-on => lcec.0.50A5.dout-2
-net water-extra => lcec.0.50A5.dout-3
 
 # 50A6 EL5152
-setp lcec.0.50A6.enc-0-pos-scale [BELT]SCALE
-net belt-enc <= lcec.0.50A6.enc-0-count
+net enc-belt <= lcec.0.50A6.enc-0-count
+
 setp lcec.0.50A6.enc-1-pos-scale [MATPROBE]SCALE
-net matprobe-pos <= lcec.0.50A6.enc-1-pos
+net matprobe-reset => lcec.0.50A6.enc-1-reset
+net matprobe-raw <= lcec.0.50A6.enc-1-pos
 
 # 50A7 EL4001
 setp lcec.0.50A7.aout-absmode 1
-setp lcec.0.50A7.aout-scale [BELT]MAX_VELOCITY
-net belt-amp-ena => lcec.0.50A7.aout-enable
-net belt-velo => lcec.0.50A7.aout-value
+setp lcec.0.50A7.aout-scale [BELT]MAX_SPEED
+net amp-enable => lcec.0.50A7.aout-enable
+net amp-speed => lcec.0.50A7.aout-value
 
 # 50A8 EL2008
-net face-mot-0 => lcec.0.50A8.dout-0
-net face-mot-1 => lcec.0.50A8.dout-1
-net face-mot-2 => lcec.0.50A8.dout-2
-net face-mot-3 => lcec.0.50A8.dout-3
-net face-mot-4 => lcec.0.50A8.dout-4
-net face-mot-5 => lcec.0.50A8.dout-5
-net face-mot-6 => lcec.0.50A8.dout-6
-net face-mot-7 => lcec.0.50A8.dout-7
+net faces-0-active => lcec.0.50A8.dout-0
+net faces-1-active => lcec.0.50A8.dout-1
+net faces-2-active => lcec.0.50A8.dout-2
+net faces-3-active => lcec.0.50A8.dout-3
+net faces-4-active => lcec.0.50A8.dout-4
+net faces-5-active => lcec.0.50A8.dout-5
+net faces-6-active => lcec.0.50A8.dout-6
+net faces-7-active => lcec.0.50A8.dout-7
 
 # 50A9 EL2809
-net face-mot-8 => lcec.0.50A9.dout-0
-net face-mot-9 => lcec.0.50A9.dout-1
-net clean-mot-0 => lcec.0.50A9.dout-2
-net clean-mot-1 => lcec.0.50A9.dout-3
-net groove-mot => lcec.0.50A9.dout-4
-net clean-mot-2 => lcec.0.50A9.dout-5
-net belt-amp-ena => lcec.0.50A9.dout-6
-net lamp-error => lcec.0.50A9.dout-7
-net mill-top-mot-0 => lcec.0.50A9.dout-8
-net mill-bot-mot-0 => lcec.0.50A9.dout-9
-net mill-top-mot-1 => lcec.0.50A9.dout-10
-net mill-bot-mot-1 => lcec.0.50A9.dout-11
-net mill-top-mot-2 => lcec.0.50A9.dout-12
-net mill-bot-mot-2 => lcec.0.50A9.dout-13
-net ctrl-voltage => lcec.0.50A9.dout-14
-#net lamp-ctrl-voltage => lcec.0.50A9.dout-14
-net lamp-operate => lcec.0.50A9.dout-15
+net faces-8-active => lcec.0.50A9.dout-0
+net faces-9-active => lcec.0.50A9.dout-1
+net cleaners-0-active => lcec.0.50A9.dout-2
+net cleaners-1-active => lcec.0.50A9.dout-3
+net unidevs-0-active => lcec.0.50A9.dout-4
+net cleaners-2-active => lcec.0.50A9.dout-5
+net amp-enable => lcec.0.50A9.dout-6
+net error-lamp => lcec.0.50A9.dout-7
+net bevel-1-mot-0-active => lcec.0.50A9.dout-8
+net bevel-0-mot-0-active => lcec.0.50A9.dout-9
+net bevel-1-mot-1-active => lcec.0.50A9.dout-10
+net bevel-0-mot-1-active => lcec.0.50A9.dout-11
+net bevel-1-mot-2-active => lcec.0.50A9.dout-12
+net bevel-0-mot-2-active => lcec.0.50A9.dout-13
+net ctrl-voltage-lamp => lcec.0.50A9.dout-14
+net automatic-running => lcec.0.50A9.dout-15
 
-# 70A2 EL2008
-net mill-top-cyl-offset => lcec.0.70A2.dout-0
-net clean-cyl-0 => lcec.0.70A2.dout-2
-net clean-cyl-1 => lcec.0.70A2.dout-4
-net clean-cyl-2 => lcec.0.70A2.dout-6
+# 70A2 EL1018
+net calib-inc <= lcec.0.70A2.din-0
+net calib-dec <= lcec.0.70A2.din-1
+net calib-ok <= lcec.0.70A2.din-2
 
-# 70A4 EL2809
-net face-cyl-0 => lcec.0.70A4.dout-0
-net face-cyl-1 => lcec.0.70A4.dout-1
-net face-cyl-2 => lcec.0.70A4.dout-2
-net face-cyl-3 => lcec.0.70A4.dout-3
-net face-cyl-4 => lcec.0.70A4.dout-4
-net face-cyl-5 => lcec.0.70A4.dout-5
-net face-cyl-6 => lcec.0.70A4.dout-6
-net face-cyl-7 => lcec.0.70A4.dout-7
-net face-cyl-8 => lcec.0.70A4.dout-8
-net face-cyl-9 => lcec.0.70A4.dout-9
-net mill-top-water-0 => lcec.0.70A4.dout-10
-net mill-top-cyl-1 => lcec.0.70A4.dout-11
-net mill-top-cyl-2 => lcec.0.70A4.dout-12
-net mill-bot-water-0 => lcec.0.70A4.dout-13
-net mill-bot-cyl-1 => lcec.0.70A4.dout-14
-net mill-bot-cyl-2 => lcec.0.70A4.dout-15
+# 70A3 EL2008
+net bevel-1-cyl-offset => lcec.0.70A3.dout-0
+net cleaners-0-active => lcec.0.70A3.dout-2
+net cleaners-1-active => lcec.0.70A3.dout-4
+net cleaners-2-active => lcec.0.70A3.dout-6
+net unidevs-0-cyl-0 => lcec.0.70A3.dout-1
+net unidevs-0-cyl-1 => lcec.0.70A3.dout-3
+net unidevs-0-cyl-2 => lcec.0.70A3.dout-5
+
+# 70A5 EL2809
+net faces-0-active => lcec.0.70A5.dout-0
+net faces-1-active => lcec.0.70A5.dout-1
+net faces-2-active => lcec.0.70A5.dout-2
+net faces-3-active => lcec.0.70A5.dout-3
+net faces-4-active => lcec.0.70A5.dout-4
+net faces-5-active => lcec.0.70A5.dout-5
+net faces-6-active => lcec.0.70A5.dout-6
+net faces-7-active => lcec.0.70A5.dout-7
+net faces-8-active => lcec.0.70A5.dout-8
+net faces-9-active => lcec.0.70A5.dout-9
+net bevel-1-mot-0-active => lcec.0.70A5.dout-10
+net bevel-1-mot-1-active => lcec.0.70A5.dout-11
+net bevel-1-mot-2-active => lcec.0.70A5.dout-12
+net bevel-0-mot-0-active => lcec.0.70A5.dout-13
+net bevel-0-mot-1-active => lcec.0.70A5.dout-14
+net bevel-0-mot-2-active => lcec.0.70A5.dout-15
 
 # 70A6 EL2809
-net => roll-cyl-0 lcec.0.70A6.dout-0
-# rool 1 is used for material probe
-net => roll-cyl-1 lcec.0.70A6.dout-1
-net => roll-cyl-2 lcec.0.70A6.dout-2
-net => roll-cyl-3 lcec.0.70A6.dout-3
-net => roll-cyl-4 lcec.0.70A6.dout-4
-net => roll-cyl-5 lcec.0.70A6.dout-5
-net => roll-cyl-6 lcec.0.70A6.dout-6
-net => roll-cyl-7 lcec.0.70A6.dout-7
-net => roll-cyl-8 lcec.0.70A6.dout-8
-net => roll-cyl-9 lcec.0.70A6.dout-9
-net => roll-cyl-10 lcec.0.70A6.dout-10
-net => roll-cyl-11 lcec.0.70A6.dout-11
-net => roll-cyl-12 lcec.0.70A6.dout-12
-net => roll-cyl-13 lcec.0.70A6.dout-13
-net => roll-cyl-14 lcec.0.70A6.dout-14
-net => roll-cyl-15 lcec.0.70A6.dout-15
+net rolls-0-active => lcec.0.70A6.dout-0
+# roll 1 is used for material probe
+net rolls-1-active => lcec.0.70A6.dout-1
+net rolls-2-active => lcec.0.70A6.dout-2
+net rolls-3-active => lcec.0.70A6.dout-3
+net rolls-4-active => lcec.0.70A6.dout-4
+net rolls-5-active => lcec.0.70A6.dout-5
+net rolls-6-active => lcec.0.70A6.dout-6
+net rolls-7-active => lcec.0.70A6.dout-7
+net rolls-8-active => lcec.0.70A6.dout-8
+net rolls-9-active => lcec.0.70A6.dout-9
+net rolls-10-active => lcec.0.70A6.dout-10
+net rolls-11-active => lcec.0.70A6.dout-11
+net rolls-12-active => lcec.0.70A6.dout-12
+net rolls-13-active => lcec.0.70A6.dout-13
+net rolls-14-active => lcec.0.70A6.dout-14
+net rolls-15-active => lcec.0.70A6.dout-15
 
-# 70A8 EL2809
-net roll-cyl-16 => lcec.0.70A8.dout-0
-net roll-cyl-17 => lcec.0.70A8.dout-1
-net groove-cyl => lcec.0.70A8.dout-2
-net roll-cyl-18 => lcec.0.70A8.dout-3
-net roll-cyl-19 => lcec.0.70A8.dout-4
-net roll-cyl-20 => lcec.0.70A8.dout-5
-net roll-cyl-21 => lcec.0.70A8.dout-6
-net roll-cyl-22 => lcec.0.70A8.dout-7
-net roll-cyl-23 => lcec.0.70A8.dout-8
-net roll-cyl-24 => lcec.0.70A8.dout-9
-net roll-cyl-25 => lcec.0.70A8.dout-10
-net roll-cyl-26 => lcec.0.70A8.dout-11
-net roll-cyl-27 => lcec.0.70A8.dout-12
-net roll-cyl-28 => lcec.0.70A8.dout-13
-net roll-cyl-29 => lcec.0.70A8.dout-14
-net roll-cyl-30 => lcec.0.70A8.dout-15
+# 70A7 EL2809
+net rolls-16-active => lcec.0.70A7.dout-0
+net rolls-17-active => lcec.0.70A7.dout-1
+net unidevs-0-active => lcec.0.70A7.dout-2
+net rolls-18-active => lcec.0.70A7.dout-3
+net rolls-19-active => lcec.0.70A7.dout-4
+net rolls-20-active => lcec.0.70A7.dout-5
+net rolls-21-active => lcec.0.70A7.dout-6
+net rolls-22-active => lcec.0.70A7.dout-7
+net rolls-23-active => lcec.0.70A7.dout-8
+net rolls-24-active => lcec.0.70A7.dout-9
+net rolls-25-active => lcec.0.70A7.dout-10
+net rolls-26-active => lcec.0.70A7.dout-11
+net rolls-27-active => lcec.0.70A7.dout-12
+net rolls-28-active => lcec.0.70A7.dout-13
+net rolls-29-active => lcec.0.70A7.dout-14
+net rolls-30-active => lcec.0.70A7.dout-15
 
 # 22T1
 # inverter mill bottom
 setp lcec.0.22T1.srv-pos-scale [AXIS_0]SCALE
-setp lcec.0.22T1.srv-home-raw [AXIS_0]HOME_VIRTUAL_SWITCH
+setp lcec.0.22T1.enc-raw-home [AXIS_0]HOME_VIRTUAL_SWITCH
 net x-enable => lcec.0.22T1.srv-enable
 net x-amp-fault <= lcec.0.22T1.srv-error
 net x-vel-cmd => lcec.0.22T1.srv-vel-cmd
-net x-pos-fb <= lcec.0.22T1.srv-pos-fb
-net x-home <= lcec.0.22T1.srv-on-home-pos
+net x-pos-fb <= lcec.0.22T1.enc-pos-abs
 net emc-on => lcec.0.22T1.srv-err-reset
 
 # 23T1
 # inverter mill top
 setp lcec.0.23T1.srv-pos-scale [AXIS_1]SCALE
-setp lcec.0.23T1.srv-home-raw [AXIS_1]HOME_VIRTUAL_SWITCH
+setp lcec.0.23T1.enc-raw-home [AXIS_1]HOME_VIRTUAL_SWITCH
 net y-enable => lcec.0.23T1.srv-enable
 net y-amp-fault <= lcec.0.23T1.srv-error
 net y-vel-cmd => lcec.0.23T1.srv-vel-cmd
-net y-pos-fb <= lcec.0.23T1.srv-pos-fb
-net y-home <= lcec.0.23T1.srv-on-home-pos
+net y-pos-fb <= lcec.0.23T1.enc-pos-abs
 net emc-on => lcec.0.23T1.srv-err-reset
 
